@@ -1,0 +1,27 @@
+name: helm-charts
+
+sources:
+  node-feature-discovery:
+    kind: helmchart
+    name: Helm chart for node-feature-discovery
+    spec:
+      url: https://kubernetes-sigs.github.io/node-feature-discovery/charts/
+      name: node-feature-discovery
+
+targets:
+  node-feature-discovery:
+    # kind: shell
+    kind: hcl
+    sourceid: node-feature-discovery
+    name: Updates for node feature discovery helm chart
+    spec:
+      file: terraform/nfd.tf
+      path: resource.helm_release.nfd.version
+      # shell: bash
+      # command: ./scripts/updatecli-hcl.sh hcl
+      # environments:
+      #   - name: HCL_FILE_TO_EDIT
+      #     value: terraform/nfd.tf
+      #   - name: PATH
+      #   - name: HCL_ATTRIBUTE
+      #     value: resource.helm_release.nfd.version

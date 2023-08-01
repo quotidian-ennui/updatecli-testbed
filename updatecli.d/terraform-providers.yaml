@@ -1,0 +1,88 @@
+name: terraform-providers
+
+sources:
+  terraform-provider-helm:
+    name: Github release hashicorp/helm
+    kind: githubrelease
+    spec:
+      owner: hashicorp
+      repository: terraform-provider-helm
+      token: '{{ requiredEnv "GITHUB_TOKEN" }}'
+      versionfilter:
+        kind: semver
+    transformers:
+      - trimprefix: "v"
+
+  terraform-provider-k8s:
+    name: Github release hashicorp/kubernetes
+    kind: githubrelease
+    spec:
+      owner: hashicorp
+      repository: terraform-provider-kubernetes
+      token: '{{ requiredEnv "GITHUB_TOKEN" }}'
+      versionfilter:
+        kind: semver
+    transformers:
+      - trimprefix: "v"
+
+  terraform-provider-env:
+    name: Github release EppO/environment
+    kind: githubrelease
+    spec:
+      owner: EppO
+      repository: terraform-provider-environment
+      token: '{{ requiredEnv "GITHUB_TOKEN" }}'
+      versionfilter:
+        kind: semver
+    transformers:
+      - trimprefix: "v"
+
+
+targets:
+  terraform-provider-helm:
+    name: Update hashicorp/helm
+    kind: shell
+    sourceid: terraform-provider-helm
+    spec:
+      shell: bash
+      command: ./scripts/updatecli-hcl.sh provider
+      environments:
+        - name: HCL_FILE_TO_EDIT
+          value: terraform/versions.tf
+        - name: PATH
+        - name: TEMP
+          value: '{{ requiredEnv "TMPDIR" }}'
+        - name: HCL_ATTRIBUTE
+          value: helm
+
+  terraform-provider-k8s:
+    name: Update hashicorp/kubernetes
+    kind: shell
+    sourceid: terraform-provider-k8s
+    spec:
+      shell: bash
+      command: ./scripts/updatecli-hcl.sh provider
+      environments:
+        - name: HCL_FILE_TO_EDIT
+          value: terraform/versions.tf
+        - name: PATH
+        - name: TEMP
+          value: '{{ requiredEnv "TMPDIR" }}'
+        - name: HCL_ATTRIBUTE
+          value: kubernetes
+
+  terraform-provider-env:
+    name: Update EppO/environment
+    kind: shell
+    sourceid: terraform-provider-env
+    spec:
+      shell: bash
+      command: ./scripts/updatecli-hcl.sh provider
+      environments:
+        - name: HCL_FILE_TO_EDIT
+          value: terraform/versions.tf
+        - name: PATH
+        - name: TEMP
+          value: '{{ requiredEnv "TMPDIR" }}'
+        - name: HCL_ATTRIBUTE
+          value: environment

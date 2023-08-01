@@ -1,0 +1,24 @@
+name: tflint-aws-rulset
+
+sources:
+  aws-ruleset:
+    name: Check tflint AWS Ruleset
+    kind: githubrelease
+    spec:
+      owner: terraform-linters
+      repository: tflint-ruleset-aws
+      token: '{{ requiredEnv "GITHUB_TOKEN" }}'
+      versionfilter:
+        kind: semver
+    transformers:
+      - trimprefix: "v"
+
+targets:
+  update-tflint.hcl:
+    name: update tflint configuration
+    kind: hcl
+    sourceid: aws-ruleset
+    spec:
+      files:
+        - terraform/.tflint.hcl
+      path: plugin.aws.version

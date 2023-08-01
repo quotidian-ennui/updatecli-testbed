@@ -1,0 +1,22 @@
+name: docker-images
+
+sources:
+  pihole:
+    kind: dockerimage
+    name: Docker image {{ requiredEnv "IMAGE_PIHOLE_NAME" }}
+    spec:
+      image: "{{ requiredEnv "IMAGE_PIHOLE_REGISTRY" }}/{{ requiredEnv "IMAGE_PIHOLE_NAME" }}"
+      # image: "ghcr.io/pihole/pihole"
+      versionFilter:
+        kind: semver
+        # pattern: ^[0-9]{4}\.[0-9]+.*$
+
+targets:
+  pihole:
+    kind: file
+    sourceid: pihole
+    name: Update Docker image ghcr.io/pi-hole/pihole
+    spec:
+      file: .env
+      matchpattern: '(IMAGE_PIHOLE_VERSION=)"(.*)"'
+      replacepattern: '$1"{{ source `pihole` }}"'

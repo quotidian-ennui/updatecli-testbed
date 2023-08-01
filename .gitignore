@@ -1,0 +1,4 @@
+.envrc.local
+.envrc
+.terraform
+.tfplan
