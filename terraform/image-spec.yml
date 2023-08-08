@@ -1,0 +1,6 @@
+jellyfin:
+  github_owner: jellyfin
+  github_repo: jellyfin
+  image: jellyfin/jellyfin
+  registry: docker.io
+  version: 10.8.9

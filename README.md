@@ -6,3 +6,24 @@ The suggested name was `fictional-couscous`
 
 - https://github.com/minamijoyo/hcledit (now in 0.55.0+)
 - https://github.com/minamijoyo/tfupdate (because we don't wanna use dependabot?)
+
+
+# Tasks
+
+Install [just](https://github.com/casey/just) (and [xc](https://github.com/joerdav/xc) if you want to use xc to run tasks defined in the README). Because sometimes it's nice to not have to think about it.
+
+## diff
+
+Runs updatecli diff passing in terraform/image-spec.yml as the values.
+
+```
+just diff
+```
+
+## apply
+
+Runs updatecli apply passing in terraform/image-spec.yml as the values.
+
+```
+just apply
+```

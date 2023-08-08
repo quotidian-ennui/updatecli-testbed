@@ -10,6 +10,25 @@ sources:
       versionFilter:
         kind: semver
         # pattern: ^[0-9]{4}\.[0-9]+.*$
+  jellyfin:
+    name: Github release for {{ .jellyfin.image }}
+    kind: githubrelease
+    spec:
+      owner: {{ .jellyfin.github_owner }}
+      repository: {{ .jellyfin.github_repo }}
+      token: '{{ requiredEnv "GITHUB_TOKEN" }}'
+      versionfilter:
+        kind: semver
+    transformers:
+      - trimprefix: "v"
+
+conditions:
+  jellyfin:
+    name: Check image availability of {{ .jellyfin.image }}
+    sourceid: jellyfin
+    kind: dockerimage
+    spec:
+      image: "{{ .jellyfin.registry }}/{{ .jellyfin.image }}"
 
 targets:
   pihole:
@@ -20,3 +39,11 @@ targets:
       file: .env
       matchpattern: '(IMAGE_PIHOLE_VERSION=)"(.*)"'
       replacepattern: '$1"{{ source `pihole` }}"'
+  jellyfin:
+    kind: yaml
+    name: Update Docker image {{ .jellyfin.image }}
+    sourceid: jellyfin
+    spec:
+      files:
+        - ./terraform/image-spec.yml
+      key: $.jellyfin.version
