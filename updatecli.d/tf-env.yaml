@@ -1,0 +1,31 @@
+name: terraform-provider-env
+
+sources:
+  terraform-provider-env:
+    name: Github release EppO/environment
+    kind: githubrelease
+    spec:
+      owner: EppO
+      repository: terraform-provider-environment
+      token: '{{ requiredEnv "GITHUB_TOKEN" }}'
+      versionfilter:
+        kind: semver
+    transformers:
+      - trimprefix: "v"
+
+targets:
+  terraform-provider-env:
+    name: Update EppO/environment
+    kind: shell
+    sourceid: terraform-provider-env
+    spec:
+      shell: bash
+      command: ./scripts/updatecli-hcl.sh provider
+      environments:
+        - name: HCL_FILE_TO_EDIT
+          value: terraform/versions.tf
+        - name: PATH
+        - name: TEMP
+          value: '{{ requiredEnv "TMPDIR" }}'
+        - name: HCL_ATTRIBUTE
+          value: environment

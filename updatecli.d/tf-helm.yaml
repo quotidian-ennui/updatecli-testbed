@@ -1,0 +1,31 @@
+name: terraform-provider-helm
+
+sources:
+  terraform-provider-helm:
+    name: Github release hashicorp/helm
+    kind: githubrelease
+    spec:
+      owner: hashicorp
+      repository: terraform-provider-helm
+      token: '{{ requiredEnv "GITHUB_TOKEN" }}'
+      versionfilter:
+        kind: semver
+    transformers:
+      - trimprefix: "v"
+
+targets:
+  terraform-provider-helm:
+    name: Update hashicorp/helm
+    kind: shell
+    sourceid: terraform-provider-helm
+    spec:
+      shell: bash
+      command: ./scripts/updatecli-hcl.sh provider
+      environments:
+        - name: HCL_FILE_TO_EDIT
+          value: terraform/versions.tf
+        - name: PATH
+        - name: TEMP
+          value: '{{ requiredEnv "TMPDIR" }}'
+        - name: HCL_ATTRIBUTE
+          value: helm

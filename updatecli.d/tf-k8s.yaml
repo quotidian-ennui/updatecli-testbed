@@ -1,0 +1,31 @@
+name: terraform-provider-k8s
+
+sources:
+  terraform-provider-k8s:
+    name: Github release hashicorp/kubernetes
+    kind: githubrelease
+    spec:
+      owner: hashicorp
+      repository: terraform-provider-kubernetes
+      token: '{{ requiredEnv "GITHUB_TOKEN" }}'
+      versionfilter:
+        kind: semver
+    transformers:
+      - trimprefix: "v"
+
+targets:
+  terraform-provider-k8s:
+    name: Update hashicorp/kubernetes
+    kind: shell
+    sourceid: terraform-provider-k8s
+    spec:
+      shell: bash
+      command: ./scripts/updatecli-hcl.sh provider
+      environments:
+        - name: HCL_FILE_TO_EDIT
+          value: terraform/versions.tf
+        - name: PATH
+        - name: TEMP
+          value: '{{ requiredEnv "TMPDIR" }}'
+        - name: HCL_ATTRIBUTE
+          value: kubernetes
