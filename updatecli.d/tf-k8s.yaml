@@ -13,19 +13,42 @@ sources:
     transformers:
       - trimprefix: "v"
 
+# Experiemntal from mcwarman https://github.com/mcwarman/updatecli/tree/feature/terraform-lock
 targets:
-  terraform-provider-k8s:
-    name: Update hashicorp/kubernetes
-    kind: shell
+  # Is desired, but might be merged into the lock configuration?
+  # tf-version-k8s:
+  #   name: Update hashicorp/kubernetes provider
+  #   kind: terraform/provider
+  #   sourceid: terraform-provider-k8s
+  #   spec:
+  #     file: terraform/versions.tf
+  #     path: kubernetes
+
+  tf-lock-k8s:
+    name: Update hashicorp/kubernetes lockfile
+    kind: terraform/lock
     sourceid: terraform-provider-k8s
     spec:
-      shell: bash
-      command: ./scripts/updatecli-hcl.sh provider
-      environments:
-        - name: HCL_FILE_TO_EDIT
-          value: terraform/versions.tf
-        - name: PATH
-        - name: TEMP
-          value: '{{ requiredEnv "TMPDIR" }}'
-        - name: HCL_ATTRIBUTE
-          value: kubernetes
+      file: terraform/.terraform.lock.hcl
+      provider: hashicorp/kubernetes
+      platforms:
+        - linux_amd64
+        - windows_amd64
+        - darwin_amd64
+        - darwin_arm64
+
+  # terraform-provider-helm:
+  #   name: Update hashicorp/kubernetes
+  #   kind: shell
+  #   sourceid: terraform-provider-k8s
+  #   spec:
+  #     shell: bash
+  #     command: ./scripts/updatecli-hcl.sh provider
+  #     environments:
+  #       - name: HCL_FILE_TO_EDIT
+  #         value: terraform/versions.tf
+  #       - name: PATH
+  #       - name: TEMP
+  #         value: '{{ requiredEnv "TMPDIR" }}'
+  #       - name: HCL_ATTRIBUTE
+  #         value: kubernetes
