@@ -1,14 +1,16 @@
+set positional-arguments
+
 # show recipes
 help:
   just --list
 
 # run updatecli diff
-diff:
-  updatecli diff --values ./terraform/image-spec.yml
+diff *args:
+  updatecli diff --values ./terraform/image-spec.yml $@
 
 # run updatecli apply
-apply:
-  updatecli apply --values ./terraform/image-spec.yml
+apply *args:
+  updatecli apply --values ./terraform/image-spec.yml $@
 
 # run terraform format
 format:
