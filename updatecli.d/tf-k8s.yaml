@@ -13,7 +13,15 @@ sources:
     transformers:
       - trimprefix: "v"
 
-# Experiemntal from mcwarman https://github.com/mcwarman/updatecli/tree/feature/terraform-lock
+conditions:
+  check-registry:
+    name: Check version in registry
+    kind: json
+    spec:
+      file: https://registry.terraform.io/v1/providers/hashicorp/kubernetes
+      key: version
+
+# Experiemntal from mcwarman https://github.com/mcwarman/updatecli/tree/feature/terraform
 targets:
   # Is desired, but might be merged into the lock configuration?
   # tf-version-k8s:
@@ -36,6 +44,14 @@ targets:
         - windows_amd64
         - darwin_amd64
         - darwin_arm64
+
+  tf-provider-k8s:
+    name: Update kubernetes provider
+    kind: terraform/provider
+    sourceid: terraform-provider-k8s
+    spec:
+      file: terraform/versions.tf
+      provider: kubernetes
 
   # terraform-provider-helm:
   #   name: Update hashicorp/kubernetes
