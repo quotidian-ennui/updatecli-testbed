@@ -10,6 +10,7 @@ sources:
       token: '{{ requiredEnv "GITHUB_TOKEN" }}'
       versionfilter:
         kind: semver
+        pattern: '{{ default "*" .updatecli.terraformProviderKubernetes }}'
     transformers:
       - trimprefix: "v"
 

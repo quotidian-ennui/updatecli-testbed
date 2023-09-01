@@ -1,2 +1,2 @@
 updatecli:
-  helm-provider: pin
+  terraformProviderHelm: = 2.9.0
