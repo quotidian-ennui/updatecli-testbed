@@ -13,6 +13,16 @@ sources:
     transformers:
       - trimprefix: "v"
 
+conditions:
+  version-pinning:
+    kind: yaml
+    name: Check Pinning for helm-provider
+    disablesourceinput: true
+    spec:
+      file: ./version_pinning.yml
+      key: $.updatecli.helm-provider
+      value: "unpinned"
+
 targets:
   terraform-provider-helm:
     name: Update hashicorp/helm
