@@ -45,6 +45,9 @@ targets:
         - windows_amd64
         - darwin_amd64
         - darwin_arm64
+    dependson:
+      - tf-provider-k8s
+    dependsonchange: true
 
   tf-provider-k8s:
     name: Update kubernetes provider
@@ -69,3 +72,6 @@ targets:
   #         value: '{{ requiredEnv "TMPDIR" }}'
   #       - name: HCL_ATTRIBUTE
   #         value: kubernetes
+
+# Represent the minimum version of Updatecli required to run this policy
+version: v0.68.0
