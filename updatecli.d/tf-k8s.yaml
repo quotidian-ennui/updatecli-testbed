@@ -57,21 +57,5 @@ targets:
       file: terraform/versions.tf
       provider: kubernetes
 
-  # terraform-provider-helm:
-  #   name: Update hashicorp/kubernetes
-  #   kind: shell
-  #   sourceid: terraform-provider-k8s
-  #   spec:
-  #     shell: bash
-  #     command: ./scripts/updatecli-hcl.sh provider
-  #     environments:
-  #       - name: HCL_FILE_TO_EDIT
-  #         value: terraform/versions.tf
-  #       - name: PATH
-  #       - name: TEMP
-  #         value: '{{ requiredEnv "TMPDIR" }}'
-  #       - name: HCL_ATTRIBUTE
-  #         value: kubernetes
-
 # Represent the minimum version of Updatecli required to run this policy
-version: v0.68.0
+version: v0.71.0
