@@ -1,3 +1,4 @@
+# {{ $opentofu := eq (env "TF_BINARY" | default "terraform") "tofu" }}
 name: terraform-provider-env
 
 sources:
@@ -14,18 +15,28 @@ sources:
       - trimprefix: "v"
 
 targets:
-  terraform-provider-env:
-    name: Update EppO/environment
-    kind: shell
+  tf-lock-environment:
+    name: Update EppO/environment lockfile
+    kind: terraform/lock
     sourceid: terraform-provider-env
     spec:
-      shell: bash
-      command: ./scripts/updatecli-hcl.sh provider
-      environments:
-        - name: HCL_FILE_TO_EDIT
-          value: terraform/versions.tf
-        - name: PATH
-        - name: TEMP
-          value: '{{ requiredEnv "TMPDIR" }}'
-        - name: HCL_ATTRIBUTE
-          value: environment
+      file: terraform/.terraform.lock.hcl
+      provider: '{{ if $opentofu }}registry.opentofu.org/{{ end }}eppo/environment'
+      platforms:
+        - linux_amd64
+        - windows_amd64
+        - darwin_amd64
+        - darwin_arm64
+    dependson:
+      - tf-provider-environment
+    dependsonchange: true
+
+  tf-provider-environment:
+    name: Update helm provider
+    kind: terraform/provider
+    sourceid: terraform-provider-env
+    spec:
+      file: terraform/versions.tf
+      provider: environment
+
+version: v0.71.0

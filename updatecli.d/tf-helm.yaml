@@ -1,3 +1,4 @@
+# {{ $opentofu := eq (env "TF_BINARY" | default "terraform") "tofu" }}
 name: terraform-provider-helm
 
 sources:
@@ -15,18 +16,28 @@ sources:
       - trimprefix: "v"
 
 targets:
-  terraform-provider-helm:
-    name: Update hashicorp/helm
-    kind: shell
+  tf-lock-helm:
+    name: Update hashicorp/helm lockfile
+    kind: terraform/lock
     sourceid: terraform-provider-helm
     spec:
-      shell: bash
-      command: ./scripts/updatecli-hcl.sh provider
-      environments:
-        - name: HCL_FILE_TO_EDIT
-          value: terraform/versions.tf
-        - name: PATH
-        - name: TEMP
-          value: '{{ requiredEnv "TMPDIR" }}'
-        - name: HCL_ATTRIBUTE
-          value: helm
+      file: terraform/.terraform.lock.hcl
+      provider: '{{ if $opentofu }}registry.opentofu.org/{{ end }}hashicorp/helm'
+      platforms:
+        - linux_amd64
+        - windows_amd64
+        - darwin_amd64
+        - darwin_arm64
+    dependson:
+      - tf-provider-helm
+    dependsonchange: true
+
+  tf-provider-helm:
+    name: Update helm provider
+    kind: terraform/provider
+    sourceid: terraform-provider-helm
+    spec:
+      file: terraform/versions.tf
+      provider: helm
+
+version: v0.71.0
